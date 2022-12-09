@@ -11,8 +11,8 @@ class UniqueValidator
   end
 
   def validate
-  validate_rows && validate_columns && validate_sub_grids  ? 'Sudoku is valid.' : 'Sudoku is invalid.'
-end
+    validate_rows && validate_columns && validate_sub_grids
+  end
 
 
   private

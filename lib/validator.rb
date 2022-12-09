@@ -1,3 +1,7 @@
+require_relative 'input_validator'
+require_relative 'zero_validator'
+require_relative 'unique_validator'
+
 class Validator
   def initialize(puzzle_string)
     @puzzle_string = puzzle_string
@@ -8,9 +12,26 @@ class Validator
   end
 
   def validate
-    # Your code here
-    # step 1: Format the puzzle string to get the rows
-    # step 2: validate the rows and columns to make sure they are valid (length should be 9 and no duplicates)
-    # step 3: if puzzle string is valid, check if it is complete or not (if it has any zeros) 
+    if valid? && complete?
+      "Sudoku is valid but incomplete."
+    elsif invalid?
+      "Sudoku is invalid."
+    else
+      "Sudoku is valid."
+    end
+  end
+
+  private
+
+  def valid?
+    InputValidator.validate(@puzzle_string) && UniqueValidator.validate(@puzzle_string)
+  end
+
+  def complete?
+    ZeroValidator.validate(@puzzle_string)
+  end
+
+  def invalid?
+    !valid?
   end
 end
