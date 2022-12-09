@@ -1,9 +1,8 @@
-require 'pry'
 require_relative 'format_sudoku'
 
 class UniqueValidator
   def initialize(puzzle_string)
-    @rows = FormatSudoku.format(puzzle_string).map { |row| row.chars.map(&:to_i) }
+    @puzzle_rows = FormatSudoku.format(puzzle_string).map { |row| row.chars.map(&:to_i) }
   end
 
   def self.validate(puzzle_string)
@@ -11,38 +10,49 @@ class UniqueValidator
   end
 
   def validate
-    validate_rows && validate_columns && validate_sub_grids
+    valid_rows? && valid_columns? && valid_sub_grids?
   end
 
+  protected
+
+  attr_reader :puzzle_rows
 
   private
 
-  def validate_rows
-  @rows.none? do |row|
-    row.select { |x| (1..9).include?(x) }.uniq.length != row.select { |x| (1..9).include?(x) }.length
+  def valid_sequence?(seq)
+    seq_numbers = seq.select { |x| (1..9).include?(x) }
+    seq_numbers.uniq.length == seq_numbers.length
   end
-end
 
-  def validate_columns
+  def valid_rows?
+    puzzle_rows.any? do |row|
+      valid_sequence?(row)
+    end
+  end
+
+  def valid_columns?
     9.times do |col|
-      col_elements = @rows.map { |row| row[col] }
-      return false if col_elements.select { |x| (1..9).include?(x) }.uniq.length != col_elements.select { |x| (1..9).include?(x) }.length
+      col_elements = puzzle_rows.map { |row| row[col] }
+
+      return false unless valid_sequence?(col_elements)
     end
     true
   end
 
-  def validate_sub_grids
+  def valid_sub_grids?
     3.times do |i|
       3.times do |j|
         sub_grid_elements = []
         3.times do |k|
           3.times do |l|
-            sub_grid_elements << @rows[i * 3 + k][j * 3 + l]
+            sub_grid_elements << puzzle_rows[i * 3 + k][j * 3 + l]
           end
         end
-        return false if sub_grid_elements.select { |x| (1..9).include?(x) }.uniq.length != sub_grid_elements.select { |x| (1..9).include?(x) }.length
+
+        return false unless valid_sequence?(sub_grid_elements)
       end
     end
+
     true
   end
 end

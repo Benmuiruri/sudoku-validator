@@ -1,9 +1,8 @@
-require 'pry'
 require_relative 'format_sudoku'
 
 class ZeroValidator
   def initialize(puzzle_string)
-    @rows = FormatSudoku.format(puzzle_string).map { |row| row.chars.map(&:to_i) }
+    @puzzle_rows = FormatSudoku.format(puzzle_string).map { |row| row.chars.map(&:to_i) }
   end
 
   def self.validate(puzzle_string)
@@ -14,9 +13,13 @@ class ZeroValidator
     contains_zero?
   end
 
+  protected
+
+  attr_reader :puzzle_rows
+
   private
 
   def contains_zero?
-    @rows.flatten.include?(0)
+    puzzle_rows.flatten.include?(0)
   end
 end
