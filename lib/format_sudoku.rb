@@ -1,7 +1,7 @@
 require 'pry'
 
 class FormatSudoku
-
+  # Class to format the puzzle string into an array of row arrays
   def initialize(puzzle_string)
     @puzzle_string = puzzle_string
   end

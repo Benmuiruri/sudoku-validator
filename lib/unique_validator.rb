@@ -1,6 +1,7 @@
 require_relative 'format_sudoku'
 
 class UniqueValidator
+  # Class to check for unique numbers in each row, column, and 3x3 sub-grid
   def initialize(puzzle_string)
     @puzzle_rows = FormatSudoku.format(puzzle_string).map { |row| row.chars.map(&:to_i) }
   end
