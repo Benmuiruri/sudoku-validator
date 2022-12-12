@@ -3,7 +3,7 @@ require_relative 'format_sudoku'
 class ZeroValidator
   # Class to check if there are any zeroes in the puzzle
   def initialize(puzzle_string)
-    @puzzle_rows = FormatSudoku.format(puzzle_string).map { |row| row.chars.map(&:to_i) }
+    @puzzle_rows = FormatSudoku.format(puzzle_string)
   end
 
   def self.validate(puzzle_string)
